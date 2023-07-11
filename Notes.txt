@@ -1,0 +1,2 @@
+H&P Note. Nephrology concept notes. MEDS table (in-hospital) -> Given in hospital
+Outpatient -> Visit ocurrence: visit_concept_id (outpatient vs inpatient) Athena. 9202 (Oupatient). 8756 (Outpatient too). Inpatient (8717), (262). note_source_value. Narrative: Backstory. Impression: Impression of Physisican
