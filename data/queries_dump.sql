@@ -1,0 +1,558 @@
+SELECT CD.person_id,
+       Person.birth_datetime,
+       Person.gender_source_value,
+       Person.race_source_value,
+       Person.ethnicity_source_value,
+       PO.procedure_source_value,
+       CD.condition_concept_id,
+       DE.drug_source_value,
+       DE.drug_source_concept_id,
+       DE.drug_exposure_start_datetime,
+       DE.quantity,
+       DE.sig,
+       DE.route_source_value,
+       DE.dose_source_value,
+       DE.dose_unit_source_value,
+       Note.note_title,
+       Note.note_text
+FROM NOTE AS Note
+JOIN CONDITION_OCCURRENCE AS CD ON CD.person_id = Note.person_id
+JOIN PERSON AS Person ON Person.person_id = CD.person_id
+JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Note.person_id
+JOIN DRUG_EXPOSURE AS DE ON DE.person_id = Note.person_id
+WHERE Note.note_title = 'order_narative: CONSULT'
+      /*(note_title = 'order_narative: IMAGING' OR
+       note_title = 'order_impression: IMAGING')  OR
+       note_title = 'H&P (View-Only)' OR
+       note_title = 'H&P' OR */
+      AND CD.condition_source_value = 'ICD10: G20'
+ORDER BY CD.person_id ASC, DE.drug_source_value ASC;
+
+SELECT CD.person_id,
+       Person.birth_datetime,
+       Person.gender_source_value,
+       Person.race_source_value,
+       Person.ethnicity_source_value,
+       PO.procedure_source_value,
+       CD.condition_concept_id,
+       DE.drug_source_value,
+       DE.drug_source_concept_id,
+       DE.drug_exposure_start_datetime,
+       DE.quantity,
+       DE.sig,
+       DE.route_source_value,
+       DE.dose_source_value,
+       DE.dose_unit_source_value,
+       Note.note_title,
+       Note.note_text
+FROM (
+  SELECT person_id, note_title, note_text
+  FROM NOTE
+  WHERE note_title = 'order_narative: CONSULT'
+) AS Note
+JOIN (
+  SELECT person_id, condition_concept_id
+  FROM CONDITION_OCCURRENCE
+  WHERE condition_source_value = 'ICD10: G20'
+) AS CD ON CD.person_id = Note.person_id
+JOIN PERSON AS Person ON Person.person_id = CD.person_id
+JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Note.person_id
+JOIN DRUG_EXPOSURE AS DE ON DE.person_id = Note.person_id
+ORDER BY CD.person_id ASC, DE.drug_source_value ASC;
+
+SELECT CD.person_id,
+       Person.birth_datetime,
+       Person.gender_source_value,
+       Person.race_source_value,
+       Person.ethnicity_source_value,
+       CD.drug_source_value,
+       CD.quantity,
+       CD.sig,
+       CD.route_source_value,
+       CD.dose_source_value,
+       CD.dose_unit_source_value,
+       Note.note_text
+FROM (
+  SELECT person_id, note_title, note_text
+  FROM NOTE
+  WHERE note_title = 'order_narative: CONSULT'
+) AS Note
+JOIN (
+  SELECT DISTINCT CO.person_id, DE.drug_source_value, DE.drug_exposure_start_datetime, DE.quantity, DE.sig, DE.route_source_value, DE.dose_source_value, DE.dose_unit_source_value
+  FROM CONDITION_OCCURRENCE AS CO
+  JOIN DRUG_EXPOSURE AS DE ON DE.person_id = CO.person_id
+  WHERE CO.condition_source_value = 'ICD10: G20'
+) AS CD ON CD.person_id = Note.person_id
+JOIN PERSON AS Person ON Person.person_id = CD.person_id
+ORDER BY CD.person_id DESC, CD.drug_source_value ASC;
+
+SELECT DISTINCT Person.person_id
+FROM PERSON AS Person
+JOIN CONDITION_OCCURRENCE AS CO
+ON Person.person_id = CO.person_id
+WHERE CO.condition_source_value = 'ICD10: G24'
+ORDER BY person_id ASC;
+
+SELECT DISTINCT NOTE.note_title, NOTE.note_text, NOTE.person_id
+FROM NOTE
+JOIN CONDITION_OCCURRENCE AS CO
+ON NOTE.person_id = CO.person_id
+WHERE CO.condition_source_value = 'ICD10: G20';
+
+SELECT DISTINCT
+    Person.person_id,
+    Person.birth_datetime,
+    Person.gender_source_value,
+    Person.race_source_value,
+    Person.ethnicity_source_value
+    /*DE.drug_source_value,
+    DE.quantity,
+    DE.sig,
+    DE.route_source_value,
+    DE.dose_source_value,
+    DE.dose_unit_source_value,
+    PO.procedure_source_value,
+    Note.note_text*/
+FROM PERSON AS Person
+JOIN (
+    SELECT DISTINCT
+        DE.person_id,
+        DE.drug_source_value,
+        DE.quantity,
+        DE.sig,
+        DE.route_source_value,
+        DE.dose_source_value,
+        DE.dose_unit_source_value
+    FROM DRUG_EXPOSURE AS DE
+    JOIN CONDITION_OCCURRENCE AS CO ON CO.person_id = DE.person_id
+    WHERE CO.condition_source_value = 'ICD10: G20'
+) AS DE ON DE.person_id = Person.person_id
+JOIN NOTE AS Note ON Note.person_id = Person.person_id
+/*JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Person.person_id*/
+WHERE Note.note_title = 'order_narative: CONSULT'
+ORDER BY Person.person_id DESC;
+
+
+
+SELECT CD.person_id,
+       Person.birth_datetime,
+       Person.gender_source_value,
+       Person.race_source_value,
+       Person.ethnicity_source_value,
+       PO.procedure_source_value,
+       CD.condition_concept_id,
+       DE.drug_source_value,
+       DE.drug_source_concept_id,
+       DE.drug_exposure_start_datetime,
+       DE.quantity,
+       DE.sig,
+       DE.route_source_value,
+       DE.dose_source_value,
+       DE.dose_unit_source_value,
+       Note.note_title,
+       Note.note_text
+FROM NOTE AS Note
+JOIN CONDITION_OCCURRENCE AS CD ON CD.person_id = Note.person_id
+JOIN PERSON AS Person ON Person.person_id = CD.person_id
+JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Note.person_id
+JOIN DRUG_EXPOSURE AS DE ON DE.person_id = Note.person_id
+WHERE Note.note_title = 'order_narative: CONSULT'
+      /*(note_title = 'order_narative: IMAGING' OR
+       note_title = 'order_impression: IMAGING')  OR
+       note_title = 'H&P (View-Only)' OR
+       note_title = 'H&P' OR */
+      AND CD.condition_source_value = 'ICD10: G20'
+ORDER BY CD.person_id ASC, DE.drug_source_value ASC;
+
+SELECT CD.person_id,
+       CD.condition_start_date,
+       CD.condition_end_date,
+       CD.condition_concept_id,
+       DE.drug_source_value,
+       DE.drug_source_concept_id,
+       DE.drug_exposure_start_datetime,
+       DE.quantity,
+       DE.sig,
+       DE.route_source_value,
+       DE.dose_source_value,
+       DE.dose_unit_source_value,
+       Note.note_text
+FROM NOTE AS Note
+JOIN CONDITION_OCCURRENCE AS CD ON CD.person_id = Note.person_id
+JOIN PERSON AS Person ON Person.person_id = CD.person_id
+JOIN DRUG_EXPOSURE AS DE ON DE.person_id = Note.person_id
+WHERE Note.note_title = 'order_narative: CONSULT'
+      /*(note_title = 'order_narative: IMAGING' OR
+       note_title = 'order_impression: IMAGING')  OR
+       note_title = 'H&P (View-Only)' OR
+       note_title = 'H&P' OR */
+      AND CD.condition_source_value = 'ICD10: G20'
+ORDER BY CD.person_id ASC, DE.drug_source_value ASC;
+
+/*Here we filter out PD drugs from PD patients, therefore the visit match the administration of PD drugs*/
+SELECT DISTINCT DE.person_id,
+       DE.drug_exposure_start_datetime,
+       DE.drug_source_value,
+       DE.dose_source_value,
+       DE.dose_unit_source_value,
+       DE.route_source_value,
+       DE.visit_occurrence_id,
+       DE.visit_detail_id,
+       CD.condition_start_date
+       /*Note.note_text*/
+FROM CDM.DRUG_EXPOSURE as DE
+JOIN CDM.CONDITION_OCCURRENCE AS CD
+ON DE.person_id = CD.person_id
+/*JOIN NOTE as Note
+
+ON Note.person_id = DE.person_id*/
+WHERE (DE.drug_source_value LIKE '%carbidopa%'
+OR DE.drug_source_value LIKE '%levodopa%'
+OR DE.drug_source_value LIKE '%entacapone%'
+OR DE.drug_source_value LIKE '%tolcapone%'
+OR DE.drug_source_value LIKE '%opicapone%'
+OR DE.drug_source_value LIKE '%pramipexole%'
+OR DE.drug_source_value LIKE '%ropinirole%'
+OR DE.drug_source_value LIKE '%apomorphine%'
+OR DE.drug_source_value LIKE '%rotigotine%'
+OR DE.drug_source_value LIKE '%selegiline%'
+OR DE.drug_source_value LIKE '%rasagiline%'
+OR DE.drug_source_value LIKE '%safinamide%'
+OR DE.drug_source_value LIKE '%amantadine%'
+OR DE.drug_source_value LIKE '%istradefylline%'
+OR DE.drug_source_value LIKE '%trihexyphenidyl%'
+OR DE.drug_source_value LIKE '%benztropine%'
+OR DE.drug_source_value LIKE '%bromocriptine%'
+OR DE.drug_source_value LIKE '%cabergoline%'
+OR DE.drug_source_value LIKE '%pergolide%'
+OR DE.drug_source_value LIKE '%lisuride%'
+)
+/*AND Note.note_title = 'order_narative: CONSULT'*/
+AND DE.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+ORDER BY DE.person_id DESC, DE.drug_source_value ASC, DE.drug_exposure_start_datetime ASC;
+
+SELECT DE.person_id,
+       DE.drug_exposure_start_datetime,
+
+       DE.visit_occurrence_id,
+       DE.visit_detail_id
+FROM CDM.DRUG_EXPOSURE as DE
+WHERE DE.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+ORDER BY DE.person_id DESC;
+
+SELECT * FROM CDM.DRUG_EXPOSURE;
+
+SELECT Person.person_id,
+       Person.birth_datetime,
+       Person.gender_source_value,
+       Person.race_source_value,
+       Person.ethnicity_source_value
+FROM CDM.PERSON as Person;
+
+SELECT DISTINCT
+    CD.person_id,
+    CD.condition_start_date,
+    /*condition_concept_id is the standard concept mapped from the source value*/
+    CD.condition_concept_id,
+    /*condition_type_concept_id tells where the condition_concept_id comes from  */
+    CD.condition_type_concept_id,
+    CD.visit_occurrence_id,
+    /*visit_detail_id is null for a reason for pd pts*/
+    CD.condition_poa
+FROM CDM.CONDITION_OCCURRENCE AS CD
+WHERE CD.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+AND CD.condition_source_value = 'ICD10: G20'
+ORDER BY CD.person_id DESC, CD.condition_start_date ASC;
+
+SELECT CD.person_id,
+MIN (CD.condition_start_date)
+/*CD.condition_poa*/
+FROM CDM.CONDITION_OCCURRENCE AS CD
+WHERE CD.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+AND CD.condition_source_value = 'ICD10: G20'
+GROUP BY CD.person_id/*, CD.condition_poa*/
+ORDER BY CD.person_id DESC;
+
+
+/*Displays all the drug_exposure_start_datetime for all PD patients.
+  Take into account that this also mean that it's showing the times for all drugs, not only PD drugs */
+SELECT DISTINCT VO.person_id,
+    DE.drug_source_value,
+       DE.drug_exposure_start_datetime,
+       VO.visit_occurrence_id,
+       VO.visit_concept_id,
+       VO.visit_start_datetime
+FROM CDM.VISIT_OCCURRENCE AS VO
+JOIN CDM.DRUG_ExPOSURE AS DE
+ON VO.person_id = DE.person_id AND VO.visit_occurrence_id = DE.visit_occurrence_id
+WHERE VO.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+/*  8717 Inpatient Hospital.
+    9201 Inpatient Visit (empty)
+    9202 Outpatient Visit
+
+AND VO.visit_concept_id = 9202*/
+
+ORDER BY VO.person_id DESC, VO.visit_start_datetime ASC, DE.drug_exposure_start_datetime ASC;
+
+SELECT * FROM CDM.VISIT_OCCURRENCE;
+
+SELECT Note.note_title, COUNT(*) AS title_count
+FROM CDM.NOTE AS Note
+WHERE Note.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+/*AND (Note.note_title = 'Progress Note' OR Note.note_title = 'Progress Notes') AND note_source_value NOT LIKE '%IC3%'*/
+GROUP BY Note.note_title
+ORDER BY title_count DESC;
+
+SELECT Note.person_id,
+       Note.note_text
+FROM CDM.NOTE as Note
+WHERE Note.person_id in (261006, 260996, 260956, 260918, 260872, 260789, 260769, 260735,
+       260680, 260382, 260268, 260102, 259994, 259937, 259505, 259469,
+       259217, 258899, 258855, 258837, 258153, 258130, 258122, 258078,
+       258076, 258074, 258045, 258015, 257685, 257569, 257440, 257257,
+       257236, 257128, 257120, 257075, 256936, 256708, 256706, 256680,
+       256628, 256348, 255675, 255671, 255398, 255327, 255046, 254942,
+       254666, 254367, 254301, 253781, 253712, 253679, 253665, 253615,
+       253410, 253326, 253316, 252834, 252733, 252727, 252725, 252548,
+       252405, 252141, 252024, 251367, 251082, 250811, 250804, 250766,
+       250583, 250228, 250105, 250078, 249890, 249713, 249691, 249643,
+       249614, 249161, 249084, 248934, 248844, 248836, 248403, 247869,
+       247690, 247394, 246662, 246383, 245632, 245615, 245457, 245208,
+       244116, 244070, 243926, 243410, 242516, 241867, 241743, 241733,
+       241559, 241426, 240979, 240927, 240655, 240288, 239108, 238908,
+       238801, 238662, 238404, 238344, 238270, 237904, 236915, 236785,
+       235621, 235403, 235373, 234554, 233398, 232871, 232553, 230650,
+       230359, 229225, 229161, 228895, 228740, 227491, 227415, 227346,
+       227285, 225959, 225841, 224885, 223756, 223557, 223037, 222938,
+       222876, 222015, 221816, 221803, 221759, 221720, 221698, 221572,
+       221493, 221386, 221378, 221295, 221162, 221085, 220761, 220757,
+       220744, 220313, 220258, 220195, 220145, 220073, 218770, 218618,
+       218473, 217974, 217750, 217734, 217571, 216990, 216583, 215798,
+       215778, 215771, 215768, 215742, 215508, 215395, 214441, 213868,
+       213862, 213780, 213526, 213120, 213065, 212715, 212433, 211822,
+       211538, 211511, 210173, 210100, 209820, 209423, 208220, 207746,
+       206828, 206303, 206133, 205269, 205200, 204959, 204866, 203757,
+       203750, 203744, 203601, 203593, 203512, 203402, 203035, 203021,
+       202932, 202804, 202475, 202164, 202116, 202019, 202007, 201948,
+       201909, 201878, 201787, 201288, 201148, 201132, 201109, 201023,
+       200851, 200747, 200707, 199862, 199710, 199582, 198706, 198429,
+       198174, 198041, 197743, 197538, 196471, 195154, 194868, 192413,
+       192187, 191277, 189637, 187893, 187800, 187758, 187737, 187509,
+       187319, 187268, 187217, 187208, 187199, 186710, 186631, 186588,
+       186491, 186338, 186327, 186247, 186234, 185591, 185491, 185322,
+       185090, 180806, 180227, 179838, 179325, 179263, 179137, 178614,
+       177917, 176706, 176462, 176417, 175744, 175605)
+AND Note.note_title = 'H&P'
+ORDER BY Note.person_id DESC;
+
+SELECT * FROM NOTE;
