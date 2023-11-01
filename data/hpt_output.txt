@@ -877,3 +877,4 @@ Fitting 10 folds for each of 96 candidates, totalling 960 fits
 [CV] END learning_rate=0.0001, max_depth=7, n_estimators=700; total time=47.8min
 Best Hyperparameters: {'learning_rate': 0.1, 'max_depth': 4, 'n_estimators': 300}
 Best Model Accuracy: 0.8449379566276238
+Execution Time: 517m 6.9s
