@@ -179,3 +179,34 @@ JOIN NOTE AS Note ON Note.person_id = Person.person_id
 /*JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Person.person_id*/
 WHERE Note.note_title = 'order_narative: CONSULT'
 ORDER BY Person.person_id DESC, DE.drug_source_value ASC;
+
+-------------------------------------------- Query used for newest dataset (1456 patients) --------------------------------------------------
+
+SELECT DISTINCT
+    Person.person_id,
+    DE.drug_source_value,
+    DE.quantity,
+    DE.sig,
+    DE.route_source_value,
+    DE.dose_source_value,
+    DE.dose_unit_source_value,
+    /*PO.procedure_source_value,*/
+    Note.note_text
+FROM IDEALIST_OMOP.CDM.PERSON AS Person
+JOIN (
+    SELECT DISTINCT
+        DE.person_id,
+        DE.drug_source_value,
+        DE.quantity,
+        DE.sig,
+        DE.route_source_value,
+        DE.dose_source_value,
+        DE.dose_unit_source_value
+    FROM IDEALIST_OMOP.CDM.DRUG_EXPOSURE AS DE
+    JOIN IDEALIST_OMOP.CDM.CONDITION_OCCURRENCE AS CO ON CO.person_id = DE.person_id
+    WHERE CO.condition_source_value = 'ICD10: G20'
+) AS DE ON DE.person_id = Person.person_id
+JOIN IDEALIST_OMOP.CDM.NOTE AS Note ON Note.person_id = Person.person_id
+/*JOIN PROCEDURE_OCCURRENCE AS PO ON PO.person_id = Person.person_id*/
+WHERE Note.note_title = 'order_narative: CONSULT'
+ORDER BY Person.person_id DESC, DE.drug_source_value ASC;

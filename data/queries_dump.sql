@@ -556,4 +556,3 @@ AND Note.note_title = 'H&P'
 ORDER BY Note.person_id DESC;
 
 SELECT * FROM IDEALIST_OMOP.CDM.NOTE;
-R
