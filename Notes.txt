@@ -2,3 +2,20 @@ H&P Note. Nephrology concept notes. MEDS table (in-hospital) -> Given in hospita
 Outpatient -> Visit ocurrence: visit_concept_id (outpatient vs inpatient) Athena. 9202 (Oupatient). 8756 (Outpatient too). Inpatient (8717), (262). note_source_value. Narrative: Backstory. Impression: Impression of Physisican
 Columnn if they have recieved a drug_dosage.
 Sex, age, Length of stays per visit, days since last visit, present on admission and diagnosed on current visit (binary task). Done and Done!
+
+----------------------------- Some todos -----------------------------------------------------------------------
+# CPT CODES FOR DBS, TF/IDF FOR TEXT, CLINICALBIOBET FOR NOTES, RNN LSTM FOR NOTES FOT TEMPORL INPUVT, PROCESSES THE EVENT AT A TIME AND OUTPUTS PREDICTION
+# CONTEX WINDOWS FOR CLINICAL BIOBERT. HIERARCHY PASS EMBEDS INTO OTHER BERT.
+# TRANSFORMERXL, LONGFORMER, TPIC MODELING
+# CLUSTER ON EVERYTHING LOOK FOR DISTINCT THINGS
+# PICK AVG IF EACH FEATURES ACCROSS MODELS (240)
+
+# Guide for drs. if anticholinergic works ten l dopa not working is more or less.
+# if antichol or comt + encaptoone no work. prediction of ldopa havinf low efficacy is X or Y
+# First choice of drug. Antichol or wahatver. 
+# importance of first drug of choice/?
+# updrs 3 is a must.
+# deadline for quals
+# 3 weeks to prepare document. f31. ask for deadline
+# plan for next commitee meeting. deadline for quals. 
+# ask for availability. 
