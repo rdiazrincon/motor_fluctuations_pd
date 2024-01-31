@@ -3,7 +3,7 @@ Outpatient -> Visit ocurrence: visit_concept_id (outpatient vs inpatient) Athena
 Columnn if they have recieved a drug_dosage.
 Sex, age, Length of stays per visit, days since last visit, present on admission and diagnosed on current visit (binary task). Done and Done!
 
------------------------------ Some todos -----------------------------------------------------------------------
+----------------------------- More TODOs because life can always be more complicated -----------------------------------------------------------------------
 # CPT CODES FOR DBS, TF/IDF FOR TEXT, CLINICALBIOBET FOR NOTES, RNN LSTM FOR NOTES FOT TEMPORL INPUVT, PROCESSES THE EVENT AT A TIME AND OUTPUTS PREDICTION
 # CONTEX WINDOWS FOR CLINICAL BIOBERT. HIERARCHY PASS EMBEDS INTO OTHER BERT.
 # TRANSFORMERXL, LONGFORMER, TPIC MODELING
