@@ -9,13 +9,3 @@ Sex, age, Length of stays per visit, days since last visit, present on admission
 # TRANSFORMERXL, LONGFORMER, TPIC MODELING
 # CLUSTER ON EVERYTHING LOOK FOR DISTINCT THINGS
 # PICK AVG IF EACH FEATURES ACCROSS MODELS (240)
-
-# Guide for drs. if anticholinergic works ten l dopa not working is more or less.
-# if antichol or comt + encaptoone no work. prediction of ldopa havinf low efficacy is X or Y
-# First choice of drug. Antichol or wahatver. 
-# importance of first drug of choice/?
-# updrs 3 is a must.
-# deadline for quals
-# 3 weeks to prepare document. f31. ask for deadline
-# plan for next commitee meeting. deadline for quals. 
-# ask for availability. 
