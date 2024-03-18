@@ -9,3 +9,32 @@ Sex, age, Length of stays per visit, days since last visit, present on admission
 # TRANSFORMERXL, LONGFORMER, TPIC MODELING
 # CLUSTER ON EVERYTHING LOOK FOR DISTINCT THINGS
 # PICK AVG IF EACH FEATURES ACCROSS MODELS (240)
+
+New: Look for DBS in the Procedure table. Use a combination of CONDITION_OCCURRENCE and PROCEDURE_OCCURRENCE.
+The Observation table has more metadata than the PROCEDURE_OCCURRENCE table.
+
+DBS Codes: 
+
+/* Potential codes (procedure_source_value) */
+ICD10: 00H00MZ (Insertion of Neurostimulator Lead into Brain, Open Approach)
+ICD10: 00H03MZ (Insertion of Neurostimulator Lead into Brain, Perc Approach)
+ICD10: 0NH00NZ (Insertion of Neurostim into Skull, Open Approach)
+
+ICD10: 00H04MZ (Insertion of Neuro Lead into Brain, Perc Endo Approach)
+ICD10: 00H032Z (Insertion of Monitoring Device into Brain, Perc Approach)
+ICD10: 00H002Z (Insertion of Monitoring Device into Brain, Open Approach)
+ICD10: 00H043Z (Insertion of Infusion Device into Brain, Perc Endo Approach)
+
+ICD10: 00P03MZ (Removal of Neurostimulator Lead from Brain, Perc Approach)
+ICD10: 00P00MZ (Removal of Neurostimulator Lead from Brain, Open Approach)
+ICD10: 0NP00NZ (Removal of Neurostim from Skull, Open Approach)
+
+ICD10: 00P032Z (Removal of Monitoring Device from Brain, Perc Approach)
+ICD10: 00P002Z (Removal of Monitoring Device from Brain, Open Approach)
+
+ICD10: 00W03MZ (Revision of Neurostimulator Lead in Brain, Perc Approach)
+ICD10: 00W00MZ (Revision of Neurostimulator Lead in Brain, Open Approach)
+ICD10: 0NW00NZ (Revision of Neurostim in Skull, Open Approach)
+CPT: L8681 (PR PT PRGRM FOR IMPLT NEUROSTIM)
+61886 - INSERT OR REPLACE CRANIAL NEUROSTIM GENERATOR OR RECEIVER W/2 OR MORE CONNECTIONS
+ICD9: 01.22 (Removal brain stim lead)
